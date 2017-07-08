@@ -47,7 +47,7 @@ const mockExec = sinon.stub();
 mockRequire('child_process', { exec: mockExec });
 
 // Now when you load the git module, it will use the mocked version of child_process
-const git = require('./git');
+const git = require('../src/git');
 
 // Remember to reset the stats of the stubbed function after each test
 afterEach(() => mockExec.reset());

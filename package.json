@@ -2,10 +2,10 @@
   "name": "npm-tests",
   "version": "1.0.0",
   "description": "Example for unit testing NPM modules",
-  "main": "git.js",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha git_test.js",
-    "lint": "jshint git.js git_test.js"
+    "test": "mocha",
+    "lint": "jshint src/*.js test/*.js"
   },
   "author": "Jeff Cooper",
   "license": "MIT",

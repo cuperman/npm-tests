@@ -10,7 +10,7 @@ mockRequire('child_process', {
 
 afterEach(() => mockExec.reset());
 
-const git = require('./git');
+const git = require('../src/git');
 
 describe('git', () => {
   beforeEach(() => {
