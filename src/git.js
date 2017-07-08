@@ -3,9 +3,9 @@ const { exec } = require('child_process');
 const execGitCommand = (command, args = []) => {
   return new Promise((resolve, reject) => {
     const shellCommand = [].concat('git', command, args).join(' ');
-    exec(shellCommand, (error, stdout, stderr) => {
+    exec(shellCommand, (error, stdout,  stderr) => {
       if (error) {
-        return reject(error, stderr);
+        return reject(error);
       }
       return resolve(stdout);
     });

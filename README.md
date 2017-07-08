@@ -71,5 +71,24 @@ describe('git', () => {
       done();
     });
   });
+
+  // and you can test error conditions by changing how the mocked exec function calls the callback
+  describe('on error', () => {
+    beforeEach(() => {
+      mockExec.callsFake((command, callback) => {
+        callback({ message: 'Failed to push repo' });
+      });
+    });
+
+    it('calls callback with an error object', (done) => {
+      git.push()
+        .then(() => {
+          throw new Error('the push command should not succeed');
+        }, (error) => {
+          expect(error.message).to.equal('Failed to push repo');
+          done();
+        });
+    });
+  });
 });
 ```

@@ -82,6 +82,25 @@ describe('git', () => {
           .catch((error) => done(error));
       });
     });
+
+    describe('on error', () => {
+      beforeEach(() => {
+        mockExec.callsFake((command, callback) => {
+          callback({ message: 'Failed to push repo' });
+        });
+      });
+
+      it('calls callback with an error object', (done) => {
+        git.push()
+          .then(() => {
+            throw new Error('the push command should not succeed');
+          }, (error) => {
+            expect(error.message).to.equal('Failed to push repo');
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
   });
 
   describe('#pull()', () => {
