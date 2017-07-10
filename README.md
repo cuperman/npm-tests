@@ -116,11 +116,23 @@ describe('git', () => {
 
   describe('#push()', () => {
     it('executes command "git push"', (done) => {
-      // Since the method is a stub, you have access to statistics about how it was called
-      // which can be really handy for assertions
-      expect(mockExec.calledOnce).to.be.true;
-      expect(mockExec.calledWith('git push')).to.be.true;
-      done();
+      git.push()
+        .then(() => {
+          // Since the method is a stub, you have access to statistics about how it was called
+          // which can be really handy for assertions
+          expect(mockExec.calledOnce).to.be.true;
+          expect(mockExec.calledWith('git push')).to.be.true;
+          done();
+        });
+    });
+
+    it('executes command "git push --force origin master"', (done) => {
+      git.push({ branch: 'master', force: true })
+        .then(() => {
+          expect(mockExec.calledOnce).to.be.true;
+          expect(mockExec.calledWith('git push --force origin master')).to.be.true;
+          done();
+        });
     });
   });
 
