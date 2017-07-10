@@ -6,32 +6,9 @@ This is an demo of a unit testing strategy for NPM packages.
 
 Test exports, mock imports
 
-## Example Package
+## Example Code
 
-I created a single NPM package that executes git commands.
-
-```javascript
-// push a git repo with javascript
-git.push();
-// => spawns a shell and executes 'git push'
-
-// and it supports options
-git.push({ branch: 'master', force: true });
-// => executes 'git push --force origin master'
-
-// it also works with pull
-git.pull();
-// => executes 'git pull'
-
-// all commands return a promise
-git.push()
-  .catch((err, stderr) => {
-    console.error('Uh oh, something went wrong');
-    console.error(stderr);
-  });
-```
-
-## Example Implementation
+I needed something to test, so I created a node module that executes git commands.
 
 ```javascript
 // git.js
@@ -73,7 +50,37 @@ const git = {
 module.exports = git;
 ```
 
+## Example Usage
+
+Here are some simple examples of how to use the module by executing javascript functions.
+
+```javascript
+// push a git repo
+git.push();
+// => spawns a shell and executes 'git push'
+
+// and it supports options
+git.push({ branch: 'master', force: true });
+// => executes 'git push --force origin master'
+
+// it also works with pull
+git.pull();
+// => executes 'git pull'
+
+// all commands return a promise
+git.push()
+  .catch((err) => {
+    console.error('Uh oh, something went wrong');
+    console.error(err.message);
+  });
+```
+
+
 ## Example Unit Tests
+
+For the unit tests, I'm using mocha/chai for framework and asserts, sinon for spies and stubs, and mock-require to mock dependencies (things that are required by the module I'm testing).
+
+The key here is using mock-require before requiring the module in your tests, stubbing the behavior of the dependent module to control scenarios, and using spies to test that your code is doing the right things.  You can apply this same technique to different frameworks and test libraries.
 
 ```javascript
 // git_test.js
