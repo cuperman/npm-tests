@@ -1,8 +1,8 @@
 const { exec } = require('child_process');
 
-const execGitCommand = (command, args = []) => {
+const execGit = (command, args = []) => {
   return new Promise((resolve, reject) => {
-    const shellCommand = [].concat('git', command, args).join(' ');
+    const shellCommand = ['git', command].concat(args).join(' ');
     exec(shellCommand, (error, stdout,  stderr) => {
       if (error) {
         return reject(error);
@@ -25,7 +25,7 @@ const git = {
       args.push(options.branch);
     }
 
-    return execGitCommand('push', args);
+    return execGit('push', args);
   },
 
   pull: (options = {}) => {
@@ -36,7 +36,7 @@ const git = {
       args.push(options.branch);
     }
 
-    return execGitCommand('pull', args);
+    return execGit('pull', args);
   }
 };
 

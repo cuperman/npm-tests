@@ -31,22 +31,66 @@ git.push()
   });
 ```
 
+## Example Implementation
+
+```javascript
+// git.js
+
+// use child_process::exec to execute shell commands
+// https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
+const { exec } = require('child_process');
+
+// a private method to execute git commands with variable arguments
+const execGit = (command, args = []) => {
+  return new Promise((resolve, reject) => {
+    const shellCommand = ['git', command].concat(args).join(' ');
+    exec(shellCommand, (error, stdout,  stderr) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(stdout);
+    });
+  });
+};
+
+const git = {
+  push: (options = {}) => {
+    let args = [];
+    // populate args from options
+    // ...
+    return execGit('push', args);
+  },
+
+  pull: (options = {}) => {
+    let args = [];
+    // populate args from options
+    // ...
+    return execGit('push', args);
+  }
+};
+
+// export git methods as public functions
+module.exports = git;
+```
+
 ## Example Unit Tests
 
 ```javascript
+// git_test.js
 
 const { expect } = require('chai');
 const sinon = require('sinon');
 const mockRequire= require('mock-require');
 
-// The git module depends on child_process#exec to execute commands in a shell.
-// So I'm going to mock the exec function to prevent the commands from running
-// durning the tests, to control the behavior during the tests, and to
-// capture information when it is called to use for assertions.
+// Since the git module depends on child_process::exec to execute commands,
+// so I'm going to mock the exec function to prevent the commands from running
+// durning the tests, to control the behavior during the tests,
+// and to use information about when and how it is called for assertions.
 const mockExec = sinon.stub();
 mockRequire('child_process', { exec: mockExec });
 
-// Now when you load the git module, it will use the mocked version of child_process
+// Now the git module will use the mocked version of child_process when it loads
+// because we used mock-require.
 const git = require('../src/git');
 
 // Remember to reset the stats of the stubbed function after each test
@@ -58,6 +102,7 @@ describe('git', () => {
     // in this case, I want to give exec a default behavior
     // because the callbacks expect to be called
     mockExec.callsFake((command, callback) => {
+      // null for the first argument means success
       callback(null);
     });
   });
@@ -76,6 +121,7 @@ describe('git', () => {
   describe('on error', () => {
     beforeEach(() => {
       mockExec.callsFake((command, callback) => {
+        // an error object for the first argument means it failed
         callback({ message: 'Failed to push repo' });
       });
     });
